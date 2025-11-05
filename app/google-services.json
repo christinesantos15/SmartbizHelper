@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1088598176689",
+    "firebase_url": "https://smartbizhelper-e0a10-default-rtdb.firebaseio.com",
+    "project_id": "smartbizhelper-e0a10",
+    "storage_bucket": "smartbizhelper-e0a10.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1088598176689:android:aea99bf1729bbb986c8390",
+        "android_client_info": {
+          "package_name": "com.example.smartbizhelper"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnkemw4-aH11XS3s7_QsN1tj0xaBvfa5c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
