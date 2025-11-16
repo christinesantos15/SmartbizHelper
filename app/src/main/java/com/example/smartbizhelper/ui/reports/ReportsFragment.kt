@@ -35,7 +35,6 @@ class ReportsFragment : Fragment() {
     private lateinit var keyInsightsText: TextView
     private lateinit var generateReportButton: Button
     private lateinit var firestore: FirebaseFirestore
-    private lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +44,6 @@ class ReportsFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_reports, container, false)
 
         firestore = FirebaseFirestore.getInstance()
-        auth = FirebaseAuth.getInstance()
 
         salesBarChart = view.findViewById(R.id.sales_bar_chart)
         productsPieChart = view.findViewById(R.id.products_pie_chart)
@@ -61,26 +59,63 @@ class ReportsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        setupCharts()
+        fetchTransactions()
     }
 
-    private fun setupCharts() {
-        val userId = auth.currentUser?.uid ?: return
-        val transactionsRef = firestore.collection("users").document(userId).collection("transactions")
+    private fun fetchTransactions() {
+        val transactionsRef = firestore.collection("transactions")
 
+        transactionsRef.get().addOnSuccessListener { result ->
+            if (result.isEmpty) {
+                // Add sample data
+                val sampleTransactions = listOf(
+                    Transaction("Handmade Necklaces", "Jewelry", 25.00, Date(), "sale"),
+                    Transaction("Vintage T-shirt", "Apparel", 45.50, Date(), "sale"),
+                    Transaction("Organic Coffee Beans", "Food & Beverage", 15.00, Date(), "sale"),
+                    Transaction("Scented Candles", "Home Goods", 12.00, Date(), "sale"),
+                    Transaction("Custom Keychains", "Accessories", 8.50, Date(), "sale"),
+                    Transaction("Leather Wallets", "Accessories", 60.00, Date(), "sale"),
+                    Transaction("Artisan Soaps", "Beauty", 7.00, Date(), "sale"),
+                    Transaction("Hand-poured Soy Wax Melts", "Home Goods", 5.00, Date(), "sale"),
+                    Transaction("Beaded Bracelets", "Jewelry", 18.00, Date(), "sale"),
+                    Transaction("Raw Materials", "Materials", 50.00, Date(), "expense"),
+                    Transaction("Shipping Supplies", "Logistics", 20.00, Date(), "expense"),
+                    Transaction("Marketing", "Business", 30.00, Date(), "expense")
+                )
+                val batch = firestore.batch()
+                for (transaction in sampleTransactions) {
+                    val docRef = transactionsRef.document()
+                    batch.set(docRef, transaction)
+                }
+                batch.commit().addOnSuccessListener {
+                    fetchAllTransactions(transactionsRef)
+                }
+            } else {
+                fetchAllTransactions(transactionsRef)
+            }
+        }
+    }
+
+    private fun fetchAllTransactions(transactionsRef: com.google.firebase.firestore.CollectionReference) {
         transactionsRef.get().addOnSuccessListener { documents ->
             val transactions = documents.toObjects(Transaction::class.java)
-            val salesTransactions = transactions.filter { it.category == "Sales" } // Assuming "Sales" category for income
+            setupCharts(transactions)
+        }
+    }
 
-            if (salesTransactions.isNotEmpty()) {
-                setupWeeklySalesBarChart(salesTransactions)
-                setupTopProductsPieChart(salesTransactions)
-            } else {
-                // Clear or hide charts if there are no sales
-                salesBarChart.clear()
-                productsPieChart.clear()
-                keyInsightsText.text = "No sales data available to generate insights."
-            }
+    private fun setupCharts(transactions: List<Transaction>) {
+        val salesTransactions = transactions.filter { it.type == "sale" }
+        val expenseTransactions = transactions.filter { it.type == "expense" }
+
+        if (salesTransactions.isNotEmpty()) {
+            setupWeeklySalesBarChart(salesTransactions)
+            setupTopProductsPieChart(salesTransactions)
+            displayInsights(salesTransactions, expenseTransactions)
+        } else {
+            // Clear or hide charts if there are no sales
+            salesBarChart.clear()
+            productsPieChart.clear()
+            keyInsightsText.text = "No sales data available to generate insights."
         }
     }
 
@@ -123,12 +158,26 @@ class ReportsFragment : Fragment() {
         productsPieChart.description.isEnabled = false
         productsPieChart.centerText = "Top Products"
         productsPieChart.invalidate()
+    }
 
-        val topProduct = productSales.maxByOrNull { it.value }
+    private fun displayInsights(sales: List<Transaction>, expenses: List<Transaction>) {
+        val totalSales = sales.sumOf { it.amount }
+        val totalExpenses = expenses.sumOf { it.amount }
+        val netProfit = totalSales - totalExpenses
+
+        val topProduct = sales.groupBy { it.productName }
+            .mapValues { it.value.sumOf { sale -> sale.amount } }
+            .maxByOrNull { it.value }
+
+        var insights = "Total Sales: $${String.format("%.2f", totalSales)}\n"
+        insights += "Total Expenses: $${String.format("%.2f", totalExpenses)}\n"
+        insights += "Net Profit: $${String.format("%.2f", netProfit)}\n"
+
         if (topProduct != null) {
-            val totalSales = productSales.values.sum()
             val percentage = (topProduct.value / totalSales) * 100
-            keyInsightsText.text = "Your top-selling product is ${topProduct.key}, contributing to ${String.format("%.1f", percentage)}%% of your total sales."
+            insights += "Your top-selling product is ${topProduct.key}, contributing to ${String.format("%.1f", percentage)}%% of your total sales."
         }
+
+        keyInsightsText.text = insights
     }
 }

@@ -67,23 +67,37 @@ class InventoryFragment : Fragment() {
 
     private fun fetchProducts() {
         val userId = auth.currentUser?.uid ?: return
-        val productsRef = db.collection("users").document(userId).collection("products")
+        val productsRef = db.collection("inventory")
 
         productsRef.get().addOnSuccessListener { result ->
             if (result.isEmpty) {
                 // Add sample data
                 val sampleProducts = listOf(
-                    Product("Handmade Necklaces", 25.00, 10, ""),
-                    Product("Vintage T-shirt", 45.50, 5, ""),
-                    Product("Organic Coffee Beans", 15.00, 20, ""),
-                    Product("Scented Candles", 12.00, 15, "")
+                    Product(name = "Handmade Necklaces", price = 25.00, stock = 10),
+                    Product(name = "Vintage T-shirt", price = 45.50, stock = 5),
+                    Product(name = "Organic Coffee Beans", price = 15.00, stock = 20),
+                    Product(name = "Scented Candles", price = 12.00, stock = 15),
+                    Product(name = "Custom Keychains", price = 8.50, stock = 30),
+                    Product(name = "Leather Wallets", price = 60.00, stock = 8),
+                    Product(name = "Artisan Soaps", price = 7.00, stock = 25),
+                    Product(name = "Hand-poured Soy Wax Melts", price = 5.00, stock = 40),
+                    Product(name = "Beaded Bracelets", price = 18.00, stock = 12)
                 )
+                val batch = db.batch()
                 for (product in sampleProducts) {
-                    productsRef.add(product)
+                    val docRef = productsRef.document()
+                    batch.set(docRef, product)
                 }
+                batch.commit().addOnSuccessListener {
+                    fetchAllProducts(productsRef)
+                }
+            } else {
+                fetchAllProducts(productsRef)
             }
         }
+    }
 
+    private fun fetchAllProducts(productsRef: com.google.firebase.firestore.CollectionReference) {
         productsRef.get()
             .addOnSuccessListener { documents ->
                 fullProductList.clear()
