@@ -64,36 +64,7 @@ class ReportsFragment : Fragment() {
 
     private fun fetchTransactions() {
         val transactionsRef = firestore.collection("transactions")
-
-        transactionsRef.get().addOnSuccessListener { result ->
-            if (result.isEmpty) {
-                // Add sample data
-                val sampleTransactions = listOf(
-                    Transaction("Handmade Necklaces", "Jewelry", 25.00, Date(), "sale"),
-                    Transaction("Vintage T-shirt", "Apparel", 45.50, Date(), "sale"),
-                    Transaction("Organic Coffee Beans", "Food & Beverage", 15.00, Date(), "sale"),
-                    Transaction("Scented Candles", "Home Goods", 12.00, Date(), "sale"),
-                    Transaction("Custom Keychains", "Accessories", 8.50, Date(), "sale"),
-                    Transaction("Leather Wallets", "Accessories", 60.00, Date(), "sale"),
-                    Transaction("Artisan Soaps", "Beauty", 7.00, Date(), "sale"),
-                    Transaction("Hand-poured Soy Wax Melts", "Home Goods", 5.00, Date(), "sale"),
-                    Transaction("Beaded Bracelets", "Jewelry", 18.00, Date(), "sale"),
-                    Transaction("Raw Materials", "Materials", 50.00, Date(), "expense"),
-                    Transaction("Shipping Supplies", "Logistics", 20.00, Date(), "expense"),
-                    Transaction("Marketing", "Business", 30.00, Date(), "expense")
-                )
-                val batch = firestore.batch()
-                for (transaction in sampleTransactions) {
-                    val docRef = transactionsRef.document()
-                    batch.set(docRef, transaction)
-                }
-                batch.commit().addOnSuccessListener {
-                    fetchAllTransactions(transactionsRef)
-                }
-            } else {
-                fetchAllTransactions(transactionsRef)
-            }
-        }
+        fetchAllTransactions(transactionsRef)
     }
 
     private fun fetchAllTransactions(transactionsRef: com.google.firebase.firestore.CollectionReference) {
