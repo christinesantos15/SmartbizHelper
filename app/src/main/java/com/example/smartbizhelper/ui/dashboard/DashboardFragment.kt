@@ -5,87 +5,104 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.smartbizhelper.AddTransactionActivity
-import com.example.smartbizhelper.R
+import com.example.smartbizhelper.databinding.FragmentDashboardBinding
 import com.example.smartbizhelper.model.Transaction
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import java.util.Date
+import com.google.firebase.firestore.ListenerRegistration
+import java.util.Locale
 
 class DashboardFragment : Fragment() {
 
+    private var _binding: FragmentDashboardBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var db: FirebaseFirestore
-    private lateinit var auth: FirebaseAuth
-    private lateinit var recentTransactionsRecyclerView: RecyclerView
     private lateinit var transactionAdapter: TransactionAdapter
-    private val transactions = mutableListOf<Transaction>()
-    private lateinit var fragmentView: View
+    private lateinit var productAdapter: ProductAdapter
+    private var firestoreListener: ListenerRegistration? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        fragmentView = inflater.inflate(R.layout.fragment_dashboard, container, false)
-
+    ): View {
+        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         db = FirebaseFirestore.getInstance()
-        auth = FirebaseAuth.getInstance()
 
-        recentTransactionsRecyclerView = fragmentView.findViewById(R.id.recent_transactions_recycler_view)
-        recentTransactionsRecyclerView.layoutManager = LinearLayoutManager(context)
-        transactionAdapter = TransactionAdapter(transactions)
-        recentTransactionsRecyclerView.adapter = transactionAdapter
+        setupRecyclerViews()
 
-        val addTransactionFab: FloatingActionButton = fragmentView.findViewById(R.id.add_transaction_fab)
-        addTransactionFab.setOnClickListener {
+        binding.addTransactionButton.setOnClickListener {
             val intent = Intent(activity, AddTransactionActivity::class.java)
             startActivity(intent)
         }
 
-        return fragmentView
+        return binding.root
     }
 
     override fun onResume() {
         super.onResume()
-        fetchDashboardData(fragmentView)
+        setupFirestoreListener()
     }
 
-    private fun fetchDashboardData(view: View) {
-        val userId = auth.currentUser?.uid ?: return
+    override fun onPause() {
+        super.onPause()
+        firestoreListener?.remove()
+    }
 
-        val incomeValue = view.findViewById<TextView>(R.id.income_value)
-        val expenseValue = view.findViewById<TextView>(R.id.expense_value)
-        val netProfitValue = view.findViewById<TextView>(R.id.net_profit_value)
-        val transactionsRef = db.collection("users").document(userId).collection("transactions")
+    private fun setupRecyclerViews() {
+        transactionAdapter = TransactionAdapter(emptyList())
+        binding.recentTransactionsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = transactionAdapter
+            isNestedScrollingEnabled = false
+        }
 
-        transactionsRef.orderBy("date", Query.Direction.DESCENDING).get()
-            .addOnSuccessListener { documents ->
-                var totalIncome = 0.0
-                var totalExpense = 0.0
-                transactions.clear()
-                val allTransactions = documents.toObjects(Transaction::class.java)
+        productAdapter = ProductAdapter(emptyList())
+        binding.recentProductsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = productAdapter
+        }
+    }
 
-                for (transaction in allTransactions) {
-                    if (transaction.type == "income") {
-                        totalIncome += transaction.amount
-                    } else if (transaction.type == "expense") {
-                        totalExpense += transaction.amount
-                    }
-                }
+    private fun setupFirestoreListener() {
+        val transactionsRef = db.collection("transactions").orderBy("date", Query.Direction.DESCENDING)
 
-                // Limit the list to the 5 most recent transactions for display
-                transactions.addAll(allTransactions.take(5))
-                transactionAdapter.notifyDataSetChanged()
-
-                incomeValue.text = String.format("$%.2f", totalIncome)
-                expenseValue.text = String.format("$%.2f", totalExpense)
-                netProfitValue.text = String.format("$%.2f", totalIncome - totalExpense)
+        firestoreListener = transactionsRef.addSnapshotListener { snapshots, e ->
+            if (e != null || snapshots == null || _binding == null) {
+                return@addSnapshotListener
             }
+
+            var totalIncome = 0.0
+            var totalExpense = 0.0
+
+            val allTransactions = snapshots.toObjects(Transaction::class.java)
+
+            for (transaction in allTransactions) {
+                if (transaction.type == "income") {
+                    totalIncome += transaction.amount
+                } else if (transaction.type == "expense") {
+                    totalExpense += transaction.amount
+                }
+            }
+
+            val recentTransactions = allTransactions.take(5)
+            transactionAdapter.updateTransactions(recentTransactions)
+
+            val recentProducts = allTransactions.distinctBy { it.productName }.take(5)
+            productAdapter.updateProducts(recentProducts)
+
+            binding.incomeValue.text = String.format(Locale.US, "₱%.2f", totalIncome)
+            binding.expenseValue.text = String.format(Locale.US, "₱%.2f", totalExpense)
+            binding.netProfitValue.text = String.format(Locale.US, "₱%.2f", totalIncome - totalExpense)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

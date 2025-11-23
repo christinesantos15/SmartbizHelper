@@ -8,11 +8,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smartbizhelper.R
 import com.example.smartbizhelper.model.Product
+import java.util.Locale
 
 class ProductAdapter(private var products: List<Product>) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_product, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_inventory_product, parent, false)
         return ProductViewHolder(view)
     }
 
@@ -36,10 +37,10 @@ class ProductAdapter(private var products: List<Product>) : RecyclerView.Adapter
 
         fun bind(product: Product) {
             productName.text = product.name
-            productPrice.text = String.format("$%.2f", product.price)
-            productStock.text = "In Stock: ${product.stock}"
+            productPrice.text = String.format(Locale.US, "₱%.2f", product.price)
+            productStock.text = String.format(Locale.US, "Stock: %d", product.stock)
             // You can load a real image here using a library like Glide or Picasso
-            // For now, we'll just use the placeholder
+            // For now, we\'ll just use the placeholder
             productImage.setImageResource(R.drawable.ic_product)
         }
     }

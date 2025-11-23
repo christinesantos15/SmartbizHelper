@@ -1,9 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.SmartbizHelper" parent="Theme.Material3.DayNight">
+    <style name="Base.Theme.SmartbizHelper" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/light_gray</item>
     </style>
 
     <style name="Theme.SmartbizHelper" parent="Base.Theme.SmartbizHelper" />
+
+    <style name="Theme.SmartbizHelper.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.SmartbizHelper.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
