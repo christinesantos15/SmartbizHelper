@@ -34,8 +34,9 @@ class SignupActivity : AppCompatActivity() {
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
-                            // Sign up success, go to HomeActivity
-                            startActivity(Intent(this, HomeActivity::class.java))
+                            // Sign up success, go back to LoginActivity
+                            Toast.makeText(baseContext, "Sign up successful! Please log in.", Toast.LENGTH_LONG).show()
+                            startActivity(Intent(this, LoginActivity::class.java))
                             finish()
                         } else {
                             // If sign up fails, display a message to the user.

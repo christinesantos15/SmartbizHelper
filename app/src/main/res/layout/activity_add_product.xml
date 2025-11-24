@@ -29,7 +29,7 @@
         android:inputType="text"
         android:padding="12dp"
         android:background="@drawable/edit_text_background"
-        app:layout_constraintTop_toBottomOf="@+id/add_product_title"
+        app:layout_constraintTop_toBottomOf="@id/add_product_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -42,9 +42,9 @@
         android:inputType="number"
         android:padding="12dp"
         android:background="@drawable/edit_text_background"
-        app:layout_constraintTop_toBottomOf="@+id/product_name_input"
-        app:layout_constraintStart_toStartOf="@+id/product_name_input"
-        app:layout_constraintEnd_toEndOf="@+id/product_name_input" />
+        app:layout_constraintTop_toBottomOf="@id/product_name_input"
+        app:layout_constraintStart_toStartOf="@id/product_name_input"
+        app:layout_constraintEnd_toEndOf="@id/product_name_input" />
 
     <EditText
         android:id="@+id/price_input"
@@ -55,9 +55,9 @@
         android:inputType="numberDecimal"
         android:padding="12dp"
         android:background="@drawable/edit_text_background"
-        app:layout_constraintTop_toBottomOf="@+id/stock_input"
-        app:layout_constraintStart_toStartOf="@+id/stock_input"
-        app:layout_constraintEnd_toEndOf="@+id/stock_input" />
+        app:layout_constraintTop_toBottomOf="@id/stock_input"
+        app:layout_constraintStart_toStartOf="@id/stock_input"
+        app:layout_constraintEnd_toEndOf="@id/stock_input" />
 
     <EditText
         android:id="@+id/category_input"
@@ -68,9 +68,9 @@
         android:inputType="text"
         android:padding="12dp"
         android:background="@drawable/edit_text_background"
-        app:layout_constraintTop_toBottomOf="@+id/price_input"
-        app:layout_constraintStart_toStartOf="@+id/price_input"
-        app:layout_constraintEnd_toEndOf="@+id/price_input" />
+        app:layout_constraintTop_toBottomOf="@id/price_input"
+        app:layout_constraintStart_toStartOf="@id/price_input"
+        app:layout_constraintEnd_toEndOf="@id/price_input" />
 
     <Button
         android:id="@+id/save_product_button"
@@ -80,8 +80,8 @@
         android:text="Save Product"
         android:backgroundTint="#4CAF50"
         android:textColor="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@+id/category_input"
-        app:layout_constraintStart_toStartOf="@+id/category_input"
-        app:layout_constraintEnd_toEndOf="@+id/category_input" />
+        app:layout_constraintTop_toBottomOf="@id/category_input"
+        app:layout_constraintStart_toStartOf="@id/category_input"
+        app:layout_constraintEnd_toEndOf="@id/category_input" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

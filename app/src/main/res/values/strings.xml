@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Smartbiz Helper</string>
+    <string name="inventory_title">Inventory</string>
+    <string name="products_title">Products</string>
+    <string name="add_product_button_text">+ ADD PRODUCT</string>
+    <string name="search_products_hint">Search Products</string>
 </resources>

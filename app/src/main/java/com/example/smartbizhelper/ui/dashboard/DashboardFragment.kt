@@ -22,7 +22,7 @@ class DashboardFragment : Fragment() {
 
     private lateinit var db: FirebaseFirestore
     private lateinit var transactionAdapter: TransactionAdapter
-    private lateinit var productAdapter: ProductAdapter
+    private lateinit var productAdapter: DashboardProductAdapter // Corrected adapter
     private var firestoreListener: ListenerRegistration? = null
 
     override fun onCreateView(
@@ -61,7 +61,7 @@ class DashboardFragment : Fragment() {
             isNestedScrollingEnabled = false
         }
 
-        productAdapter = ProductAdapter(emptyList())
+        productAdapter = DashboardProductAdapter(emptyList()) // Corrected adapter
         binding.recentProductsRecyclerView.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = productAdapter
@@ -93,7 +93,7 @@ class DashboardFragment : Fragment() {
             transactionAdapter.updateTransactions(recentTransactions)
 
             val recentProducts = allTransactions.distinctBy { it.productName }.take(5)
-            productAdapter.updateProducts(recentProducts)
+            productAdapter.updateProducts(recentProducts) // Corrected adapter
 
             binding.incomeValue.text = String.format(Locale.US, "₱%.2f", totalIncome)
             binding.expenseValue.text = String.format(Locale.US, "₱%.2f", totalExpense)
