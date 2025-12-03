@@ -8,6 +8,19 @@ android {
     namespace = "com.example.smartbizhelper"
     compileSdk = 36
 
+    signingConfigs {
+        getByName("debug") {
+            //Change the location based on the location of SmartBizHelper Keystore located at the project folder
+            //example
+            //storeFile = file("C:\\Users\\Christine\\AndroidStudioProjects\\SmartbizHelper\\keystore\\SmartBizKeyStore")
+
+            storeFile = file("C:\\Users\\Vedonic\\AndroidStudioProjects\\SmartbizHelper\\keystore\\SmartBizKeyStore")
+            storePassword = "00000000"
+            keyAlias = "SmartBiz"
+            keyPassword = "00000000"
+        }
+    }
+
     defaultConfig {
         applicationId = "com.example.smartbizhelper"
         minSdk = 24
@@ -25,6 +38,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            signingConfig = signingConfigs.getByName("debug")
+        }
+
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {

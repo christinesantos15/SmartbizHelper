@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_gray"
     tools:context=".ui.profile.ProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,8 +17,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Profile"
-            android:textColor="@color/header_green"
             android:textSize="24sp"
+            android:textColor="@color/teal_medium"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -39,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="User Name"
-            android:textColor="@color/black"
+            android:textColor="@color/teal_medium"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/profile_email"
@@ -54,7 +53,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="user.email@example.com"
-            android:textColor="@color/dark_gray"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@id/profile_image"
             app:layout_constraintEnd_toEndOf="parent"
@@ -66,8 +64,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:textColor="@color/teal_light"
             android:text="Edit Profile"
-            android:textColor="@color/green"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -79,24 +77,42 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:textColor="@color/teal_medium"
             android:text="Settings"
-            android:textColor="@color/header_green"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/edit_profile_button" />
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/notifications_switch"
+
+        <LinearLayout
+            android:id="@+id/Notification"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Notifications"
-            android:textSize="18sp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/settings_title" />
+            app:layout_constraintTop_toBottomOf="@id/settings_title">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:drawableStart="@android:drawable/ic_dialog_alert"
+                android:drawablePadding="16dp"
+                android:gravity="center_vertical"
+                />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/notifications_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Notifications"
+                android:textSize="18sp"
+                 />
+
+        </LinearLayout>
         <TextView
             android:id="@+id/theme_setting"
             android:layout_width="0dp"
@@ -110,7 +126,7 @@
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/notifications_switch" />
+            app:layout_constraintTop_toBottomOf="@+id/Notification" />
 
         <TextView
             android:id="@+id/language_setting"
@@ -133,8 +149,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:textColor="@color/teal_medium"
             android:text="Account"
-            android:textColor="@color/header_green"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -145,11 +161,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:textColor="@android:color/holo_red_dark"
             android:drawableStart="@android:drawable/ic_menu_revert"
             android:drawablePadding="16dp"
             android:gravity="center_vertical"
             android:text="Sign Out"
-            android:textColor="@color/colorAccent"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

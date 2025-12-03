@@ -1,7 +1,30 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
     <style name="Base.Theme.SmartbizHelper" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Primary & Secondary -->
+        <item name="colorPrimary">@color/cyan_dark</item>
+        <item name="colorPrimaryVariant">@color/teal_light</item>
+        <item name="colorSecondary">@color/teal_medium</item>
+
+        <!-- Background & Surface -->
+        <item name="android:colorBackground">@color/off_white</item>
+        <item name="colorSurface">@color/surface_dark</item>
+
+        <!-- Text & Icons -->
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorOnBackground">@color/off_white</item>
+        <item name="colorOnSurface">@color/off_white</item>
+
+        <!-- Bottom Navigation -->
+        <item name="bottomNavigationStyle">@style/Widget.SmartbizHelper.BottomNavigationView.Night</item>
     </style>
+
+    <style name="Widget.SmartbizHelper.BottomNavigationView.Night" parent="Widget.Material3.BottomNavigationView">
+        <item name="backgroundTint">@color/cyan_dark</item>
+        <item name="itemIconTint">@color/white</item>
+        <item name="itemTextColor">@color/white</item>
+        <item name="itemRippleColor">@color/bottom_nav_focus_night</item>
+    </style>
+
+    <style name="Theme.SmartbizHelper" parent="Base.Theme.SmartbizHelper" />
 </resources>

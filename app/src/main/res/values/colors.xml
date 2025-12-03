@@ -1,13 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="green">#00C853</color>
-    <color name="light_green">#B9F6CA</color>
-    <color name="dark_gray">#A9A9A9</color>
-    <color name="light_gray">#F5F5F5</color>
-    <color name="header_green">#2E7D32</color>
-    <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#FFFFFF</color>
-    <color name="colorAccent">#00C853</color>
+    <!-- Branding / Accent colors -->
+    <color name="teal_light">#3AA590</color>       <!-- Primary light -->
+    <color name="cyan_dark">#2F9EBB</color>        <!-- Primary variant / dark swap -->
+    <color name="teal_medium">#39A496</color>      <!-- Secondary accent -->
+    <color name="green_dark">#1B5E20</color>       <!-- Dark green background / text -->
+    <color name="off_white">#EBF6F6</color>        <!-- Light background / text -->
+
+    <!-- Neutral colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="surface_dark">#121212</color>
+
+
+    <color name="bottom_nav_selected">#2C8C7B</color> <!-- slightly darker than teal_light -->
+    <color name="bottom_nav_selected_night">#277B91</color>  <!-- slightly darker than cyan_dark -->
+
+    <!-- colors.xml -->
+    <color name="bottom_nav_focus">@color/cyan_dark</color> <!-- slightly different for focus -->
+    <color name="bottom_nav_focus_night">@color/teal_medium</color> <!-- can be same or adjusted -->
+
 </resources>
